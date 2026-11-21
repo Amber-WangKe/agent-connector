@@ -13,7 +13,7 @@ Resolve-DnsName github.com -Type A
 如果 API 正常而网页超时，可以验证固定 IP。下面只是示例，IP 会变化，不要长期盲用：
 
 ```powershell
-curl.exe -I --connect-timeout 10 --resolve github.com:443:20.169.109.160 https://github.com/
+curl.exe -I --connect-timeout 10 --resolve github.com:443:<VERIFIED_IP> https://github.com/
 ```
 
 ## 推荐顺序
@@ -36,8 +36,11 @@ Host github.com
 # 先测试，不需要管理员权限
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\fix-github-hosts.ps1 -Action Test
 
-# 在“以管理员身份运行”的 PowerShell 中执行
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\fix-github-hosts.ps1 -Action Apply -Ip 20.169.109.160
+# 在“以管理员身份运行”的 PowerShell 中执行，脚本会自动测试候选 IP
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\fix-github-hosts.ps1 -Action Apply
+
+# 也可以显式指定一个刚验证过的 IP
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\fix-github-hosts.ps1 -Action Apply -Ip <VERIFIED_IP>
 
 # 恢复原状
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\fix-github-hosts.ps1 -Action Revert
