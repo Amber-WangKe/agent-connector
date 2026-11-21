@@ -111,6 +111,23 @@ test("does not expose internal error details from malformed setup requests", asy
   }
 });
 
+test("does not expose internal error details from failed Feishu checks", async () => {
+  const files = fixture();
+  const setup = createSetupServer({ ...files, token: "test-token", logger: { error() {} } });
+  const { url } = await setup.listen({ port: 0 });
+  try {
+    const response = await fetch(url + "/api/test-feishu", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-starry-setup-token": "test-token" },
+      body: JSON.stringify({ appId: "", appSecret: "" }),
+    });
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), { error: "Feishu credential verification failed" });
+  } finally {
+    await setup.close();
+  }
+});
+
 test("verifies Feishu credentials without returning the token or secret", async () => {
   let received;
   const result = await verifyFeishuCredentials({
