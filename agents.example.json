@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "defaultAgent": "local-http",
+  "security": {
+    "allowAllUsers": false,
+    "allowedOpenIds": [],
+    "allowedChatIds": [],
+    "maxConcurrency": 2,
+    "maxPromptChars": 12000,
+    "maxJobsPerUser": 1,
+    "allowRemoteAgentEndpoints": false
+  },
+  "agents": [
+    {
+      "id": "local-http",
+      "label": "Local HTTP Agent",
+      "type": "http",
+      "endpoint": "http://127.0.0.1:8787/ask",
+      "method": "POST",
+      "headers": {"Content-Type": "application/json"},
+      "body": {"prompt": "{prompt}", "chatId": "{chatId}", "userId": "{userId}", "jobId": "{jobId}"},
+      "responsePath": "answer",
+      "timeoutMs": 300000,
+      "readOnly": true
+    },
+    {
+      "id": "codex",
+      "label": "Codex CLI",
+      "type": "cli",
+      "executable": "codex",
+      "args": ["exec", "--sandbox", "read-only", "--skip-git-repo-check", "--color", "never", "--ephemeral", "-C", "{cwd}", "-"],
+      "cwd": ".",
+      "stdin": "{prompt}",
+      "timeoutMs": 1200000,
+      "readOnly": true
+    }
+  ]
+}

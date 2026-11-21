@@ -1,0 +1,42 @@
+name: Feature request
+description: Propose a scoped improvement to the Connector.
+title: "[feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem should this feature solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Explain the smallest useful behavior and any alternatives considered.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Feishu integration
+        - Setup console
+        - CLI Agent provider
+        - HTTP Agent provider
+        - Security and permissions
+        - Packaging and installation
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security and privacy impact
+      description: Does this need cloud infrastructure, broader permissions, write access or new secret storage?
+    validations:
+      required: true

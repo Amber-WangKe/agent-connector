@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible Connector or setup-console problem.
+title: "[bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include App Secrets, tokens, personal `open_id` values or private repository contents. Rotate any credential that was exposed.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use fake values and a minimal Agent where possible.
+      placeholder: |
+        1. Run ...
+        2. Configure ...
+        3. Send ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Connector version
+      placeholder: 0.2.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version and Agent type.
+      placeholder: Windows 11, Node.js 22, CLI Agent
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs
+      description: Remove credentials, identifiers, local absolute paths and private data.
+      render: text
+    validations:
+      required: false
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed all secrets and personal identifiers from this report.
+          required: true
+        - label: This is not a security vulnerability; vulnerabilities are reported privately under SECURITY.md.
+          required: true

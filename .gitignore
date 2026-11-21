@@ -1,0 +1,20 @@
+# Local-only runtime configuration and state
+.env
+.env.*
+!.env.example
+agents.json
+data/
+
+# Dependencies and generated packages
+node_modules/
+dist/
+coverage/
+*.zip
+
+# Temporary files, logs and editor state
+*.log
+.current.patch
+.verify-*/
+.DS_Store
+Thumbs.db
+*.tmp

@@ -1,0 +1,25 @@
+{
+  "name": "starry-agent-connector",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Feishu long-connection connector for user-owned local AI agents",
+  "license": "MIT",
+  "author": "Starry contributors",
+  "keywords": ["feishu", "lark", "local-first", "ai-agents", "codex", "cli"],
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "node --env-file-if-exists=.env src/setup.js",
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "check": "node --env-file-if-exists=.env src/index.js --check",
+    "package:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File ./package.ps1",
+    "test": "node --test",
+    "audit:public": "node scripts/public-audit.mjs",
+    "verify": "npm test && npm run audit:public"
+  },
+  "dependencies": {
+    "@larksuiteoapi/node-sdk": "^1.76.0"
+  }
+}
