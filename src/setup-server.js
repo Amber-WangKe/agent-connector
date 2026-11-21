@@ -150,7 +150,8 @@ export function createSetupServer({ configPath, envPath, token = crypto.randomBy
       try {
         writeJson(response, 200, await verifyFeishuCredentials({ appId, appSecret }));
       } catch (error) {
-        writeJson(response, 400, { error: redactError(error, [appSecret]) });
+        logger.error("Feishu credential check failed: " + redactError(error, [appSecret]));
+        writeJson(response, 400, { error: "Feishu credential verification failed" });
       }
       return;
     }
@@ -159,7 +160,8 @@ export function createSetupServer({ configPath, envPath, token = crypto.randomBy
       try {
         writeJson(response, 200, await testAgentConnection(payload.agent));
       } catch (error) {
-        writeJson(response, 400, { error: redactError(error) });
+        logger.error("Agent connection test failed: " + redactError(error));
+        writeJson(response, 400, { error: "Agent connection test failed" });
       }
       return;
     }
