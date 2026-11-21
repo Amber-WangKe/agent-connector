@@ -4,7 +4,19 @@ param(
   [string]$Action = "Test",
 
   [ValidatePattern("^(\d{1,3}\.){3}\d{1,3}$")]
-  [string]$Ip = "20.169.109.160"
+  [string]$Ip,
+
+  [ValidateRange(500, 10000)]
+  [int]$TimeoutMilliseconds = 2500,
+
+  [string[]]$CandidateIp = @(
+    "20.6.7.17",
+    "20.205.243.166",
+    "140.82.112.4",
+    "140.82.113.4",
+    "140.82.114.4",
+    "140.82.116.4"
+  )
 )
 
 $ErrorActionPreference = "Stop"
@@ -40,18 +52,53 @@ function Remove-ManagedBlock([string[]]$Lines) {
   return @($Lines[0..($bounds.First - 1)] + $Lines[($bounds.Last + 1)..($Lines.Count - 1)])
 }
 
-function Test-Route {
-  $tcp = Test-NetConnection -ComputerName $Ip -Port 443 -InformationLevel Quiet -WarningAction SilentlyContinue
+function Get-CandidateIp {
+  $candidates = [Collections.Generic.List[string]]::new()
+  if ($Ip) { $candidates.Add($Ip) }
+  foreach ($server in @("8.8.8.8", "1.1.1.1")) {
+    try {
+      foreach ($address in (Resolve-DnsName github.com -Type A -Server $server -ErrorAction Stop).IPAddress) {
+        if ($address -match "^(\d{1,3}\.){3}\d{1,3}$") { $candidates.Add($address) }
+      }
+    } catch {}
+  }
+  foreach ($address in $CandidateIp) {
+    if ($address -match "^(\d{1,3}\.){3}\d{1,3}$") { $candidates.Add($address) }
+  }
+  return @($candidates | Select-Object -Unique)
+}
+
+function Test-Tcp443([string]$TargetIp) {
+  $client = [Net.Sockets.TcpClient]::new()
+  try {
+    $connect = $client.ConnectAsync($TargetIp, 443)
+    if (-not $connect.Wait($TimeoutMilliseconds)) { return $false }
+    return $client.Connected
+  } catch {
+    return $false
+  } finally {
+    $client.Dispose()
+  }
+}
+
+function Find-ReachableIp {
+  foreach ($candidate in Get-CandidateIp) {
+    if (Test-Tcp443 $candidate) { return $candidate }
+  }
+  return $null
+}
+
+function Test-Route([string]$TargetIp) {
   [pscustomobject]@{
     Host = "github.com"
-    Ip = $Ip
-    Tcp443 = $tcp
+    Ip = $TargetIp
+    Tcp443 = Test-Tcp443 $TargetIp
     Dns = ((Resolve-DnsName github.com -Type A -ErrorAction SilentlyContinue).IPAddress -join ", ")
   }
 }
 
 if ($Action -eq "Test") {
-  Test-Route | Format-Table -AutoSize
+  Get-CandidateIp | ForEach-Object { Test-Route $_ } | Format-Table -AutoSize
   $bounds = Get-ManagedBounds @(Get-Content -LiteralPath $hostsPath)
   "ManagedBlockPresent=$($bounds.First -ge 0)"
   exit 0
@@ -62,9 +109,8 @@ $original = @(Get-Content -LiteralPath $hostsPath)
 $withoutManagedBlock = @(Remove-ManagedBlock $original)
 
 if ($Action -eq "Apply") {
-  if (-not (Test-NetConnection -ComputerName $Ip -Port 443 -InformationLevel Quiet -WarningAction SilentlyContinue)) {
-    throw "TCP 443 is not reachable at $Ip; choose another GitHub frontend IP."
-  }
+  $targetIp = if ($Ip) { $Ip } else { Find-ReachableIp }
+  if (-not $targetIp) { throw "No reachable GitHub frontend IP was found; pass -Ip with a verified address." }
 
   $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
   $backupPath = "$hostsPath.starry-backup-$stamp"
@@ -74,12 +120,12 @@ if ($Action -eq "Apply") {
     $markerA
     "# Temporary workaround for an unreachable GitHub frontend."
     "# Update or remove this block when GitHub changes IP addresses. Run this script with -Action Revert."
-    "$Ip github.com"
+    "$targetIp github.com"
     $markerB
   )
   Set-Content -LiteralPath $hostsPath -Value @($withoutManagedBlock + $managedBlock) -Encoding ASCII
   ipconfig /flushdns | Out-Null
-  "Applied=$Ip"
+  "Applied=$targetIp"
   "Backup=$backupPath"
 } elseif ($Action -eq "Revert") {
   $stamp = Get-Date -Format "yyyyMMdd-HHmmss"

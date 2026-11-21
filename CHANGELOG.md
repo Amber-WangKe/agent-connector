@@ -27,4 +27,5 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 - Loopback-only setup console with a per-session token and Host validation.
 - Secrets remain in the local `.env` file and are redacted from errors.
+- Unexpected setup request failures return a generic response and log details only on the server.
 - Local files are never executed as shell commands based on Feishu text.

@@ -10,6 +10,7 @@ import { renderSetupPage } from "./setup-page.js";
 
 const MAX_BODY_BYTES = 256 * 1024;
 const FEISHU_TOKEN_URL = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal";
+const SAFE_REQUEST_ERROR = "Request processing failed";
 
 function writeJson(response, status, payload) {
   const body = JSON.stringify(payload);
@@ -168,7 +169,7 @@ export function createSetupServer({ configPath, envPath, token = crypto.randomBy
   server = http.createServer((request, response) => {
     route(request, response).catch((error) => {
       logger.error("Setup request failed: " + redactError(error));
-      if (!response.headersSent) writeJson(response, 500, { error: redactError(error) });
+      if (!response.headersSent) writeJson(response, 500, { error: SAFE_REQUEST_ERROR });
       else response.end();
     });
   });

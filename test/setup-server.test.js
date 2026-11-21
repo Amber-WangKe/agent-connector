@@ -94,6 +94,23 @@ test("tests a local CLI agent through the setup API", async () => {
   }
 });
 
+test("does not expose internal error details from malformed setup requests", async () => {
+  const files = fixture();
+  const setup = createSetupServer({ ...files, token: "test-token", logger: { error() {} } });
+  const { url } = await setup.listen({ port: 0 });
+  try {
+    const response = await fetch(url + "/api/save", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-starry-setup-token": "test-token" },
+      body: "{not-json",
+    });
+    assert.equal(response.status, 500);
+    assert.deepEqual(await response.json(), { error: "Request processing failed" });
+  } finally {
+    await setup.close();
+  }
+});
+
 test("verifies Feishu credentials without returning the token or secret", async () => {
   let received;
   const result = await verifyFeishuCredentials({
