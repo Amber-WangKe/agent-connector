@@ -5,7 +5,7 @@ export function renderSetupPage({ token }) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="setup-token" content="${token}">
-  <title>Starry Connector 配置台</title>
+  <title>agent-connector 配置台</title>
   <style>
     :root {
       color-scheme: dark;
@@ -270,7 +270,7 @@ export function renderSetupPage({ token }) {
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"></div>
         <div>
-          <div class="brand-name">Starry Connector</div>
+          <div class="brand-name">agent-connector</div>
           <div class="brand-sub">本地 Agent 接入飞书</div>
         </div>
       </div>
@@ -420,7 +420,7 @@ export function renderSetupPage({ token }) {
     async function api(path, options = {}) {
       const response = await fetch(path, {
         ...options,
-        headers: { 'content-type': 'application/json', 'x-starry-setup-token': setupToken, ...(options.headers || {}) },
+        headers: { 'content-type': 'application/json', 'x-agent-connector-setup-token': setupToken, ...(options.headers || {}) },
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || ('HTTP ' + response.status));
@@ -561,7 +561,7 @@ export function renderSetupPage({ token }) {
       try {
         errorBox.textContent = '';
         const agent = readAgentCard(card);
-        const result = await api('/api/test-agent', { method: 'POST', body: JSON.stringify({ agent, prompt: '请只回复 STARRY_AGENT_OK' }) });
+        const result = await api('/api/test-agent', { method: 'POST', body: JSON.stringify({ agent, prompt: '请只回复 AGENT_CONNECTOR_OK' }) });
         errorBox.textContent = '连通成功：' + result.output.slice(0, 500);
         errorBox.style.color = 'var(--accent)';
         showToast('Agent ' + agent.id + ' 连通成功');

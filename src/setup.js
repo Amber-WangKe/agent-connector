@@ -4,9 +4,9 @@ import { createSetupServer } from "./setup-server.js";
 
 const { configPath, envPath } = resolveSetupPaths();
 const setup = createSetupServer({ configPath, envPath });
-const { url } = await setup.listen({ port: Number(process.env.STARRY_SETUP_PORT || 43120) });
+const { url } = await setup.listen({ port: Number(process.env.AGENT_CONNECTOR_SETUP_PORT || 43120) });
 
-console.log("Starry Connector setup: " + url);
+console.log("agent-connector setup: " + url);
 console.log("Configuration stays on this computer. Close this window to stop the setup server.");
 
 if (!process.argv.includes("--no-open")) {

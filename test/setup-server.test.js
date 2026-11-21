@@ -6,7 +6,7 @@ import path from "node:path";
 import { createSetupServer, verifyFeishuCredentials } from "../src/setup-server.js";
 
 function fixture() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "starry-setup-server-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-setup-server-"));
   const configPath = path.join(root, "agents.json");
   fs.writeFileSync(configPath, JSON.stringify({
     defaultAgent: "echo",
@@ -31,12 +31,12 @@ test("serves a token-protected local setup page and state", async () => {
   try {
     const page = await fetch(url + "/");
     assert.equal(page.status, 200);
-    assert.match(await page.text(), /Starry Connector/);
+    assert.match(await page.text(), /agent-connector/);
 
     const denied = await fetch(url + "/api/state");
     assert.equal(denied.status, 403);
 
-    const state = await fetch(url + "/api/state", { headers: { "x-starry-setup-token": "test-token" } });
+    const state = await fetch(url + "/api/state", { headers: { "x-agent-connector-setup-token": "test-token" } });
     assert.equal(state.status, 200);
     const data = await state.json();
     assert.equal(data.appSecretConfigured, false);
@@ -47,7 +47,7 @@ test("serves a token-protected local setup page and state", async () => {
 });
 
 test("serves starter state before the first config has been saved", async () => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "starry-setup-fresh-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-setup-fresh-"));
   const setup = createSetupServer({
     configPath: path.join(root, "agents.json"),
     envPath: path.join(root, ".env"),
@@ -56,7 +56,7 @@ test("serves starter state before the first config has been saved", async () => 
   });
   const { url } = await setup.listen({ port: 0 });
   try {
-    const response = await fetch(url + "/api/state", { headers: { "x-starry-setup-token": "fresh-token" } });
+    const response = await fetch(url + "/api/state", { headers: { "x-agent-connector-setup-token": "fresh-token" } });
     assert.equal(response.status, 200);
     const state = await response.json();
     assert.equal(state.agents[0].id, "local-http");
@@ -73,7 +73,7 @@ test("tests a local CLI agent through the setup API", async () => {
   try {
     const response = await fetch(url + "/api/test-agent", {
       method: "POST",
-      headers: { "content-type": "application/json", "x-starry-setup-token": "test-token" },
+      headers: { "content-type": "application/json", "x-agent-connector-setup-token": "test-token" },
       body: JSON.stringify({
         agent: {
           id: "echo",
@@ -88,7 +88,7 @@ test("tests a local CLI agent through the setup API", async () => {
     });
     assert.equal(response.status, 200);
     const data = await response.json();
-    assert.match(data.output, /STARRY_AGENT_OK/);
+    assert.match(data.output, /AGENT_CONNECTOR_OK/);
   } finally {
     await setup.close();
   }
@@ -101,7 +101,7 @@ test("does not expose internal error details from malformed setup requests", asy
   try {
     const response = await fetch(url + "/api/save", {
       method: "POST",
-      headers: { "content-type": "application/json", "x-starry-setup-token": "test-token" },
+      headers: { "content-type": "application/json", "x-agent-connector-setup-token": "test-token" },
       body: "{not-json",
     });
     assert.equal(response.status, 500);
@@ -118,7 +118,7 @@ test("does not expose internal error details from failed Feishu checks", async (
   try {
     const response = await fetch(url + "/api/test-feishu", {
       method: "POST",
-      headers: { "content-type": "application/json", "x-starry-setup-token": "test-token" },
+      headers: { "content-type": "application/json", "x-agent-connector-setup-token": "test-token" },
       body: JSON.stringify({ appId: "", appSecret: "" }),
     });
     assert.equal(response.status, 400);

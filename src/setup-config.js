@@ -88,8 +88,8 @@ export function setupState({ configPath, envPath }) {
   const config = buildConfig(rawConfig);
   const env = parseEnv(fs.existsSync(envPath) ? fs.readFileSync(envPath, "utf8") : "");
   return {
-    appId: env.STARRY_FEISHU_APP_ID || "",
-    appSecretConfigured: Boolean(env.STARRY_FEISHU_APP_SECRET),
+    appId: env.AGENT_CONNECTOR_FEISHU_APP_ID || "",
+    appSecretConfigured: Boolean(env.AGENT_CONNECTOR_FEISHU_APP_SECRET),
     defaultAgent: config.defaultAgent,
     security: config.security,
     agents: config.agents.map(publicAgent),
@@ -160,18 +160,18 @@ export function saveSetup({ payload, configPath, envPath }) {
   const previousRawConfig = readJson(configPath, {});
   const previousEnv = parseEnv(fs.existsSync(envPath) ? fs.readFileSync(envPath, "utf8") : "");
   const normalized = normalizeSetupPayload(payload, previousRawConfig);
-  const appId = normalized.appId || previousEnv.STARRY_FEISHU_APP_ID || "";
-  const appSecret = normalized.appSecret || previousEnv.STARRY_FEISHU_APP_SECRET || "";
+  const appId = normalized.appId || previousEnv.AGENT_CONNECTOR_FEISHU_APP_ID || "";
+  const appSecret = normalized.appSecret || previousEnv.AGENT_CONNECTOR_FEISHU_APP_SECRET || "";
   if (!appId) throw new Error("Feishu App ID is required");
   if (!appSecret) throw new Error("Feishu App Secret is required");
 
   const envText = [
-    "# Starry Connector local configuration. Never commit or share this file.",
-    "STARRY_FEISHU_APP_ID=" + appId,
-    "STARRY_FEISHU_APP_SECRET=" + appSecret,
-    "STARRY_CONFIG=" + path.basename(configPath),
-    "STARRY_DATA_DIR=./data",
-    "STARRY_LOG_LEVEL=info",
+    "# agent-connector local configuration. Never commit or share this file.",
+    "AGENT_CONNECTOR_FEISHU_APP_ID=" + appId,
+    "AGENT_CONNECTOR_FEISHU_APP_SECRET=" + appSecret,
+    "AGENT_CONNECTOR_CONFIG=" + path.basename(configPath),
+    "AGENT_CONNECTOR_DATA_DIR=./data",
+    "AGENT_CONNECTOR_LOG_LEVEL=info",
     "",
   ].join("\n");
   atomicWrite(envPath, envText);

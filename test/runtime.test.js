@@ -30,7 +30,7 @@ test("handles a Feishu event and posts the asynchronous result", async () => {
       },
     },
   };
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "starry-runtime-"));
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-runtime-"));
   const runtime = createRuntime({ config, client, dataDir, logger: { warn() {}, error() {} } });
   await runtime.onEvent({
     sender: { sender_type: "user", sender_id: { open_id: "ou_test" } },
@@ -71,7 +71,7 @@ test("answers whoami before the allowlist so users can complete setup", async ()
   const runtime = createRuntime({
     config,
     client,
-    dataDir: fs.mkdtempSync(path.join(os.tmpdir(), "starry-whoami-")),
+    dataDir: fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-whoami-")),
     logger: { warn() {}, error() {} },
   });
   await runtime.onEvent({

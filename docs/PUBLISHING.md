@@ -7,7 +7,7 @@ This checklist covers the first public release. Complete the local checks before
 Recommended repository name:
 
 ```text
-starry-agent-connector
+agent-connector
 ```
 
 Recommended description:
@@ -41,7 +41,7 @@ npm run verify
 npm audit --registry=https://registry.npmjs.org --audit-level=high
 git status --short --ignored
 npm run package:windows
-Get-FileHash .\dist\Starry-Connector-0.2.0-win-x64.zip -Algorithm SHA256
+Get-FileHash .\dist\agent-connector-0.2.0-win-x64.zip -Algorithm SHA256
 ```
 
 Before the first commit, confirm that `.env`, `agents.json`, `data/`, `dist/` and `node_modules/` are ignored. Never force-add a file that contains local credentials or personal identifiers.
@@ -63,13 +63,13 @@ If `api.github.com` works but `github.com` times out, follow
 Create the public repository from the current directory:
 
 ```powershell
-gh repo create <owner>/starry-agent-connector --public --source . --remote origin --push --description "Local-first Feishu connector for user-owned AI agents"
+gh repo create <owner>/agent-connector --public --source . --remote origin --push --description "Local-first Feishu connector for user-owned AI agents"
 ```
 
 If the repository already exists:
 
 ```powershell
-git remote add origin https://github.com/<owner>/starry-agent-connector.git
+git remote add origin https://github.com/<owner>/agent-connector.git
 git push -u origin main
 ```
 
@@ -109,7 +109,7 @@ git tag -a v0.2.0 -m "v0.2.0"
 git push origin v0.2.0
 ```
 
-The release workflow runs the public-tree audit, builds `Starry-Connector-<version>-win-x64.zip`, and creates a draft GitHub release with generated notes.
+The release workflow runs the public-tree audit, builds `agent-connector-<version>-win-x64.zip`, and creates a draft GitHub release with generated notes.
 
 Download the draft asset and independently verify:
 

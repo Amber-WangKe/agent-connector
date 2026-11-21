@@ -13,6 +13,10 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 - Cross-platform CI and Windows release automation.
 - Public-tree audit for accidental credential or local-state commits.
 
+### Changed
+
+- Renamed the public repository, package, Windows release artifact, setup UI and environment variable prefix to `agent-connector` / `AGENT_CONNECTOR_`.
+
 ## [0.2.0] - 2026-11-21
 
 ### Added

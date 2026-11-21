@@ -1,4 +1,4 @@
-# Starry Connector 产品化评估
+# agent-connector 产品化评估
 
 ## 结论
 
@@ -11,7 +11,7 @@
         |
         | 飞书官方长连接，或云端 Relay
         v
-用户电脑上的 Starry Connector
+用户电脑上的 agent-connector
         |-- CLI Provider: Codex / Claude / dsh / Hermes
         `-- HTTP Provider: 127.0.0.1 / 局域网 Agent
 ```
@@ -30,7 +30,7 @@
 
 用户创建自己的飞书自建应用，安装 Node.js，运行 `setup.ps1` 在本机配置台填写飞书凭据与 Agent。
 
-优点：不需要 Starry 云服务，代码和 Agent 凭据完全留在本机。
+优点：不需要额外云服务，代码和 Agent 凭据完全留在本机。
 
 缺点：飞书开放平台配置和 Node.js 安装仍有门槛，普通用户较难独立完成。
 
@@ -38,7 +38,7 @@
 
 ### B. 官方飞书应用 + 云端 Relay（正式产品，推荐）
 
-Starry 提供一个已上架的飞书应用。用户在飞书扫码安装，在自己的电脑安装 Connector，Connector 主动建立一个出站 Relay 连接。飞书事件先到 Starry 云端，再转发给绑定用户的 Connector。
+项目方提供一个已上架的飞书应用。用户在飞书扫码安装，在自己的电脑安装 Connector，Connector 主动建立一个出站 Relay 连接。飞书事件先到托管 Relay，再转发给绑定用户的 Connector。
 
 云端只保存账号、设备绑定、路由和审计元数据；代码、文件、Agent 凭据与结果默认留在本机。Relay 断线时任务进入队列并提示设备离线。
 
@@ -101,4 +101,4 @@ P2：
 
 ## 当前可交付边界
 
-现在可以交付的是“用户自带飞书应用 + 用户本机 Connector”的内测版，还不是可以在飞书应用市场里安装后直接连接任意用户 localhost 的成品。要变成真正的平台插件，必须增加 Starry Relay、飞书应用审核、设备绑定、多租户隔离和计费/配额；这些不能让本机 Agent 地址直接暴露给飞书云端来绕过。
+现在可以交付的是“用户自带飞书应用 + 用户本机 Connector”的内测版，还不是可以在飞书应用市场里安装后直接连接任意用户 localhost 的成品。要变成真正的平台插件，必须增加托管 Relay、飞书应用审核、设备绑定、多租户隔离和计费/配额；这些不能让本机 Agent 地址直接暴露给飞书云端来绕过。

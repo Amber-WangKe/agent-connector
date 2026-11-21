@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Starry Agent Connector is currently pre-1.0. Security fixes are applied to the latest release and the `main` branch. Older snapshots are not guaranteed to receive backports.
+agent-connector is currently pre-1.0. Security fixes are applied to the latest release and the `main` branch. Older snapshots are not guaranteed to receive backports.
 
 ## Report a vulnerability
 

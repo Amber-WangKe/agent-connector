@@ -17,7 +17,7 @@ export function parseCommand(rawText, config) {
   const head = headRaw.toLowerCase();
   const rest = restParts.join(" ").trim();
 
-  if (["help", "?", "starry"].includes(head) && (!rest || head === "help" || head === "?")) {
+  if (["help", "?", "agent-connector"].includes(head) && (!rest || head === "help" || head === "?")) {
     return { kind: "help" };
   }
   if (head === "agents") return { kind: "agents" };
@@ -29,7 +29,7 @@ export function parseCommand(rawText, config) {
     return jobCommand(agentId || config.defaultAgent, promptParts.join(" "), config);
   }
 
-  if (head === "starry") {
+  if (head === "agent-connector") {
     const [verb, ...tail] = rest.split(/\s+/);
     if (!verb || ["help", "?"].includes(verb.toLowerCase())) return { kind: "help" };
     if (verb.toLowerCase() === "agents") return { kind: "agents" };
@@ -57,7 +57,7 @@ function jobCommand(agentId, prompt, config) {
 export function helpText(config) {
   const ids = config.agents.map((agent) => agent.id).join(", ");
   return [
-    "Starry Agent Connector",
+    "agent-connector",
     "",
     "/agents - list configured local agents",
     "/status - show connector status",
