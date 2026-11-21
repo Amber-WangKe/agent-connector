@@ -40,10 +40,11 @@ for (const file of files) {
 }
 
 const privateValues = new Set();
+const retiredBrandPattern = new RegExp("st" + "arry", "i");
 const envPath = path.join(root, ".env");
 if (fs.existsSync(envPath)) {
   for (const line of fs.readFileSync(envPath, "utf8").split(/\r?\n/)) {
-    const match = line.match(/^STARRY_FEISHU_APP_(?:ID|SECRET)=(.*)$/);
+    const match = line.match(/^AGENT_CONNECTOR_FEISHU_APP_(?:ID|SECRET)=(.*)$/);
     const value = match?.[1]?.trim();
     if (value && value.length >= 8 && !value.includes("replace_me")) privateValues.add(value);
   }
@@ -70,7 +71,7 @@ const secretPatterns = [
   /gh[pousr]_[A-Za-z0-9]{20,}/,
   /github_pat_[A-Za-z0-9_]{20,}/,
   /AKIA[0-9A-Z]{16}/,
-  new RegExp("D:" + "\\\\" + "starry-workspace", "i"),
+  new RegExp("D:" + "\\\\" + "st" + "arry-workspace", "i"),
   new RegExp("C:" + "\\\\" + "Users" + "\\\\" + "Administrator", "i"),
   /\bou_[a-f0-9]{32}\b/i,
   /\boc_[a-f0-9]{32}\b/i,
@@ -88,6 +89,7 @@ for (const file of files) {
   }
   const text = fs.readFileSync(absolute, "utf8");
   scanned += 1;
+  if (retiredBrandPattern.test(text)) violations.push("Retired product name found in " + file);
   for (const pattern of secretPatterns) {
     if (pattern.test(text)) violations.push("Potential credential or local path in " + file);
   }

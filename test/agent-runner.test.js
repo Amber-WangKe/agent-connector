@@ -20,7 +20,7 @@ test("runs a CLI agent without a shell and passes prompt on stdin", async () => 
       readOnly: true,
     }],
   });
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "starry-cli-"));
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-cli-"));
   const result = await runAgent(config.byId.get("echo"), {
     id: "job-test", prompt: "hello; whoami", chatId: "chat", userId: "user",
   }, { dataDir });
@@ -51,7 +51,7 @@ test("runs an HTTP agent against a configured loopback endpoint", async () => {
         readOnly: true,
       }],
     });
-    const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "starry-http-"));
+    const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-http-"));
     const result = await runAgent(config.byId.get("http-agent"), {
       id: "job-http", prompt: "你好", chatId: "chat", userId: "user",
     }, { dataDir });
@@ -80,7 +80,7 @@ test("reports a useful connection error for an unavailable HTTP agent", async ()
   await assert.rejects(
     runAgent(config.byId.get("offline-http"), {
       id: "job-offline", prompt: "hello", chatId: "chat", userId: "user",
-    }, { dataDir: fs.mkdtempSync(path.join(os.tmpdir(), "starry-offline-")) }),
+    }, { dataDir: fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-offline-")) }),
     /connection failed to 127\.0\.0\.1:/,
   );
 });

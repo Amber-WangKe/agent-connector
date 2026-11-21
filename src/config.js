@@ -145,7 +145,7 @@ export function buildConfig(rawConfig, { env = process.env } = {}) {
   };
 }
 
-export function loadConfig(configPath = process.env.STARRY_CONFIG || "agents.json", options = {}) {
+export function loadConfig(configPath = process.env.AGENT_CONNECTOR_CONFIG || "agents.json", options = {}) {
   const resolved = path.resolve(CONNECTOR_ROOT, configPath);
   let text;
   try {
@@ -163,10 +163,10 @@ export function loadConfig(configPath = process.env.STARRY_CONFIG || "agents.jso
 }
 
 export function assertFeishuEnvironment(env = process.env) {
-  const appId = String(env.STARRY_FEISHU_APP_ID || "").trim();
-  const appSecret = String(env.STARRY_FEISHU_APP_SECRET || "").trim();
-  if (!appId || appId.includes("replace_me")) throw new Error("STARRY_FEISHU_APP_ID is not configured");
-  if (!appSecret || appSecret.includes("replace_me")) throw new Error("STARRY_FEISHU_APP_SECRET is not configured");
+  const appId = String(env.AGENT_CONNECTOR_FEISHU_APP_ID || "").trim();
+  const appSecret = String(env.AGENT_CONNECTOR_FEISHU_APP_SECRET || "").trim();
+  if (!appId || appId.includes("replace_me")) throw new Error("AGENT_CONNECTOR_FEISHU_APP_ID is not configured");
+  if (!appSecret || appSecret.includes("replace_me")) throw new Error("AGENT_CONNECTOR_FEISHU_APP_SECRET is not configured");
   return { appId, appSecret };
 }
 

@@ -1,10 +1,10 @@
-# Starry Agent Connector
+# agent-connector
 
 **中文** | [English](README.en.md)
 
 一个 local-first 的飞书机器人连接器：用户在自己的电脑运行 Connector，把飞书消息路由给本地的 Codex、Claude、dsh、Hermes 或其他 CLI / HTTP Agent。Connector 通过飞书 WebSocket 长连接主动外连，不需要公网 IP、端口映射或内网穿透。
 
-![Starry Connector setup console](docs/screenshots/setup-desktop.png)
+![agent-connector setup console](docs/screenshots/setup-desktop.png)
 
 > 当前为 pre-1.0 内测版本。它不是飞书官方产品，也不声称与飞书、Lark、Codex、Claude 或其他 Agent 厂商存在官方关联。
 
@@ -17,12 +17,12 @@
     |
     | 飞书 WebSocket 长连接
     v
-本机 Starry Connector
+本机 agent-connector
     |-- CLI Agent（Codex、Claude、dsh、Hermes 等）
     `-- HTTP Agent（127.0.0.1、局域网或用户明确允许的远程服务）
 ```
 
-代码、Agent 凭据和本地配置默认只保留在用户电脑。当前版本不需要 Starry 云端服务。
+代码、Agent 凭据和本地配置默认只保留在用户电脑。当前版本不需要额外的云端转发服务。
 
 ## 能力
 
@@ -133,7 +133,7 @@ npm run package:windows
 
 ## 项目状态与路线
 
-当前交付的是“用户自带飞书应用 + 本机 Connector”的内测版。正式飞书应用市场版本还需要 Starry Relay、设备绑定、多租户隔离、审批与审计。详见 [PRODUCTIZATION.md](PRODUCTIZATION.md) 和 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+当前交付的是“用户自带飞书应用 + 本机 Connector”的内测版。正式飞书应用市场版本还需要托管 Relay、设备绑定、多租户隔离、审批与审计。详见 [PRODUCTIZATION.md](PRODUCTIZATION.md) 和 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
 
 ## 参与贡献
 

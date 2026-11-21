@@ -9,11 +9,11 @@ if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     $OutputDirectory = Join-Path $packageRoot "dist"
 }
 $packageJson = Get-Content -LiteralPath (Join-Path $packageRoot "package.json") -Raw -Encoding UTF8 | ConvertFrom-Json
-$archiveName = "Starry-Connector-$($packageJson.version)-win-x64.zip"
+$archiveName = "agent-connector-$($packageJson.version)-win-x64.zip"
 $archivePath = Join-Path ([System.IO.Path]::GetFullPath($OutputDirectory)) $archiveName
 
 $tempBase = [System.IO.Path]::GetFullPath([System.IO.Path]::GetTempPath())
-$staging = [System.IO.Path]::GetFullPath((Join-Path $tempBase ("starry-connector-package-" + [guid]::NewGuid().ToString("N"))))
+$staging = [System.IO.Path]::GetFullPath((Join-Path $tempBase ("agent-connector-package-" + [guid]::NewGuid().ToString("N"))))
 if (-not $staging.StartsWith($tempBase, [System.StringComparison]::OrdinalIgnoreCase)) {
     throw "Unsafe temporary package path."
 }

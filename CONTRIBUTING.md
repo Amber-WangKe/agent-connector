@@ -1,4 +1,4 @@
-# Contributing to Starry Agent Connector
+# Contributing to agent-connector
 
 Thanks for helping improve the project. This repository connects a Feishu bot to user-owned local Agents, so changes must preserve three properties: local credentials stay local, untrusted chat text never becomes a shell command, and write access remains opt-in.
 

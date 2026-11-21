@@ -13,7 +13,7 @@ import {
 } from "../src/setup-config.js";
 
 function tempPaths() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "starry-setup-config-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-setup-config-"));
   return { root, configPath: path.join(root, "agents.json"), envPath: path.join(root, ".env") };
 }
 
@@ -51,7 +51,7 @@ test("validates and saves setup without exposing the secret in state", () => {
   assert.equal(state.appSecretConfigured, true);
   assert.deepEqual(state.security.allowedOpenIds, ["ou_test", "ou_second"]);
   assert.equal(JSON.stringify(state).includes("local_test_secret_123"), false);
-  assert.match(fs.readFileSync(envPath, "utf8"), /STARRY_FEISHU_APP_SECRET=local_test_secret_123/);
+  assert.match(fs.readFileSync(envPath, "utf8"), /AGENT_CONNECTOR_FEISHU_APP_SECRET=local_test_secret_123/);
 });
 
 test("preserves an existing secret when the setup form leaves it blank", () => {
@@ -61,7 +61,7 @@ test("preserves an existing secret when the setup form leaves it blank", () => {
     security: { allowedOpenIds: ["ou_test"] },
     agents: [{ id: "echo", type: "cli", executable: process.execPath, args: ["-e", "process.stdin.pipe(process.stdout)"], cwd: root, readOnly: true }],
   }));
-  fs.writeFileSync(envPath, "STARRY_FEISHU_APP_ID=cli_existing\nSTARRY_FEISHU_APP_SECRET=existing_secret\n");
+  fs.writeFileSync(envPath, "AGENT_CONNECTOR_FEISHU_APP_ID=cli_existing\nAGENT_CONNECTOR_FEISHU_APP_SECRET=existing_secret\n");
   const state = saveSetup({
     configPath,
     envPath,

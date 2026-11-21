@@ -6,7 +6,7 @@ import { agentsText, helpText, parseCommand } from "./command.js";
 import { JobQueue } from "./jobs.js";
 import { runAgent } from "./agent-runner.js";
 
-const DATA_DIR = path.resolve(CONNECTOR_ROOT, process.env.STARRY_DATA_DIR || "data");
+const DATA_DIR = path.resolve(CONNECTOR_ROOT, process.env.AGENT_CONNECTOR_DATA_DIR || "data");
 
 function parseMessageContent(message) {
   if (message?.message_type !== "text") return "";
@@ -48,7 +48,7 @@ async function sendText(client, chatId, text) {
 }
 
 function resultMessage(job) {
-  const header = `Starry/${job.agentId}\nJob: ${job.id}`;
+  const header = `agent-connector/${job.agentId}\nJob: ${job.id}`;
   if (job.status === "failed") return `${header}\nStatus: failed\n\n${job.error || "Unknown error"}`;
   return `${header}\nStatus: succeeded\n\n${job.output || "(empty result)"}`;
 }
@@ -81,7 +81,7 @@ export function createRuntime({ config, client, dataDir = DATA_DIR, logger = con
 
     if (!isAllowed(event, config.security)) {
       logger.warn(`Rejected message from open_id=${senderOpenId(event) || "(missing)"} chat_id=${chatId}`);
-      await sendText(client, chatId, "你尚未在 Starry Connector 的 allowedOpenIds 中授权。\n发送 /whoami 获取 open_id，填入本机配置后重新启动。");
+      await sendText(client, chatId, "你尚未在 agent-connector 的 allowedOpenIds 中授权。\n发送 /whoami 获取 open_id，填入本机配置后重新启动。");
       return;
     }
 
@@ -93,7 +93,7 @@ export function createRuntime({ config, client, dataDir = DATA_DIR, logger = con
     }
     if (command.kind === "status") {
       const stats = queue.stats();
-      return sendText(client, chatId, `Starry Connector: online\nAgents: ${config.agents.length}\nQueued: ${stats.queued}\nRunning: ${stats.running}\nAccess: read-only`);
+      return sendText(client, chatId, `agent-connector: online\nAgents: ${config.agents.length}\nQueued: ${stats.queued}\nRunning: ${stats.running}\nAccess: read-only`);
     }
     if (!command.prompt) return sendText(client, chatId, `用法：/ask ${command.agentId} <问题>`);
     if (command.prompt.length > config.security.maxPromptChars) {
@@ -148,11 +148,11 @@ async function start() {
     loggerLevel: lark.LoggerLevel.info,
   });
 
-  console.log(`Starry Connector starting with ${config.agents.length} agent(s). Access: read-only.`);
+  console.log(`agent-connector starting with ${config.agents.length} agent(s). Access: read-only.`);
   await wsClient.start({ eventDispatcher: dispatcher });
 
   const shutdown = () => {
-    console.log("Starry Connector stopping.");
+    console.log("agent-connector stopping.");
     process.exit(0);
   };
   process.once("SIGINT", shutdown);
@@ -165,7 +165,7 @@ if (isMain) {
     await checkMode();
   } else {
     start().catch((error) => {
-      console.error(`Starry Connector failed: ${error.message}`);
+      console.error(`agent-connector failed: ${error.message}`);
       process.exitCode = 1;
     });
   }

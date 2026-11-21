@@ -28,7 +28,7 @@ try {
         throw "Setup was not completed."
     }
     $envText = Get-Content -LiteralPath $envFile -Raw -Encoding UTF8
-    if ($envText -match 'STARRY_FEISHU_APP_ID=(cli_replace_me|)\s*$' -or $envText -match 'STARRY_FEISHU_APP_SECRET=(replace_me|)\s*$') {
+    if ($envText -match 'AGENT_CONNECTOR_FEISHU_APP_ID=(cli_replace_me|)\s*$' -or $envText -match 'AGENT_CONNECTOR_FEISHU_APP_SECRET=(replace_me|)\s*$') {
         throw "Feishu credentials are not configured. Run .\setup.ps1."
     }
 
@@ -36,7 +36,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Connector configuration is invalid." }
 
     Write-Host ""
-    Write-Host "Starting Starry Connector. Stop the Hermes Gateway first if it uses the same Feishu app." -ForegroundColor Yellow
+    Write-Host "Starting agent-connector. Stop the Hermes Gateway first if it uses the same Feishu app." -ForegroundColor Yellow
     npm start
     exit $LASTEXITCODE
 }

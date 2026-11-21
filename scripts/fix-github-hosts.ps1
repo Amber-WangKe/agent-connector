@@ -21,8 +21,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 $hostsPath = Join-Path $env:SystemRoot "System32\drivers\etc\hosts"
-$markerA = "# Starry GitHub routing start"
-$markerB = "# Starry GitHub routing end"
+$markerA = "# agent-connector GitHub routing start"
+$markerB = "# agent-connector GitHub routing end"
 
 function Assert-Administrator {
   $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -113,7 +113,7 @@ if ($Action -eq "Apply") {
   if (-not $targetIp) { throw "No reachable GitHub frontend IP was found; pass -Ip with a verified address." }
 
   $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
-  $backupPath = "$hostsPath.starry-backup-$stamp"
+  $backupPath = "$hostsPath.agent-connector-backup-$stamp"
   Copy-Item -LiteralPath $hostsPath -Destination $backupPath
 
   $managedBlock = @(
@@ -129,7 +129,7 @@ if ($Action -eq "Apply") {
   "Backup=$backupPath"
 } elseif ($Action -eq "Revert") {
   $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
-  $backupPath = "$hostsPath.starry-before-revert-$stamp"
+  $backupPath = "$hostsPath.agent-connector-before-revert-$stamp"
   Copy-Item -LiteralPath $hostsPath -Destination $backupPath
   Set-Content -LiteralPath $hostsPath -Value $withoutManagedBlock -Encoding ASCII
   ipconfig /flushdns | Out-Null

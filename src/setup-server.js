@@ -97,11 +97,11 @@ export async function testAgentConnection(agent) {
     security: { allowAllUsers: true },
     agents: [{ ...agent, readOnly: true }],
   });
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "starry-setup-agent-"));
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "agent-connector-setup-agent-"));
   try {
     const result = await runAgent(config.byId.get(agent.id), {
       id: "setup-test-" + crypto.randomBytes(4).toString("hex"),
-      prompt: "请只回复 STARRY_AGENT_OK",
+      prompt: "请只回复 AGENT_CONNECTOR_OK",
       chatId: "setup",
       userId: "setup",
     }, { dataDir });
@@ -128,7 +128,7 @@ export function createSetupServer({ configPath, envPath, token = crypto.randomBy
       writeHtml(response, renderSetupPage({ token }));
       return;
     }
-    if (request.headers["x-starry-setup-token"] !== token) {
+    if (request.headers["x-agent-connector-setup-token"] !== token) {
       writeJson(response, 403, { error: "配置会话已失效，请重新运行 npm run setup" });
       return;
     }
@@ -145,8 +145,8 @@ export function createSetupServer({ configPath, envPath, token = crypto.randomBy
     if (request.method === "POST" && request.url === "/api/test-feishu") {
       const payload = await readBody(request);
       const previousEnv = parseEnv(fs.existsSync(envPath) ? fs.readFileSync(envPath, "utf8") : "");
-      const appId = String(payload.appId || previousEnv.STARRY_FEISHU_APP_ID || "").trim();
-      const appSecret = String(payload.appSecret || previousEnv.STARRY_FEISHU_APP_SECRET || "").trim();
+      const appId = String(payload.appId || previousEnv.AGENT_CONNECTOR_FEISHU_APP_ID || "").trim();
+      const appSecret = String(payload.appSecret || previousEnv.AGENT_CONNECTOR_FEISHU_APP_SECRET || "").trim();
       try {
         writeJson(response, 200, await verifyFeishuCredentials({ appId, appSecret }));
       } catch (error) {

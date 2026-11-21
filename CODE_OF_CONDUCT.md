@@ -2,7 +2,7 @@
 
 ## Our commitment
 
-We want participation in Starry Agent Connector to be useful, respectful and safe for people with different backgrounds, experience levels and communication styles.
+We want participation in agent-connector to be useful, respectful and safe for people with different backgrounds, experience levels and communication styles.
 
 ## Expected behavior
 

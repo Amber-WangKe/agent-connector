@@ -1,6 +1,6 @@
 # Architecture
 
-Starry Agent Connector is a local-first adapter between a Feishu bot and Agents that run under the user's control. Its main job is to make one outbound connection to Feishu and avoid exposing a user's computer to the public internet.
+agent-connector is a local-first adapter between a Feishu bot and Agents that run under the user's control. Its main job is to make one outbound connection to Feishu and avoid exposing a user's computer to the public internet.
 
 ## System boundary
 
@@ -19,7 +19,7 @@ Local Connector process
 
 Feishu cloud services cannot connect to `127.0.0.1` on a user's computer. A cloud-hosted app or marketplace plugin therefore cannot call a local Agent merely because the configuration contains a localhost URL. The Connector reverses the direction: the user's computer connects outward to Feishu.
 
-This repository does not contain a Starry Relay service. It is the self-hosted Connector used with a Feishu custom app owned by the user.
+This repository does not contain a hosted Relay service. It is the self-hosted Connector used with a Feishu custom app owned by the user.
 
 ## Message path
 

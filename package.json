@@ -1,10 +1,10 @@
 {
-  "name": "starry-agent-connector",
+  "name": "agent-connector",
   "version": "0.2.0",
   "private": true,
   "description": "Feishu long-connection connector for user-owned local AI agents",
   "license": "MIT",
-  "author": "Starry contributors",
+  "author": "agent-connector contributors",
   "keywords": ["feishu", "lark", "local-first", "ai-agents", "codex", "cli"],
   "type": "module",
   "engines": {

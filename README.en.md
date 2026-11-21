@@ -1,12 +1,12 @@
-# Starry Agent Connector
+# agent-connector
 
 [中文](README.md) | **English**
 
-Starry Agent Connector is a local-first bridge between a Feishu bot and user-owned AI Agents. It runs on the user's computer, connects outward through Feishu's WebSocket long connection, and routes messages to local Codex, Claude, dsh, Hermes, generic CLI processes or HTTP Agents.
+agent-connector is a local-first bridge between a Feishu bot and user-owned AI Agents. It runs on the user's computer, connects outward through Feishu's WebSocket long connection, and routes messages to local Codex, Claude, dsh, Hermes, generic CLI processes or HTTP Agents.
 
 No public IP, port forwarding or tunneling service is required.
 
-![Starry Connector setup console](docs/screenshots/setup-desktop.png)
+![agent-connector setup console](docs/screenshots/setup-desktop.png)
 
 > This is a pre-1.0 community project. It is not an official Feishu, Lark or Agent-vendor product.
 
@@ -22,7 +22,7 @@ Feishu group
     |
     | Feishu WebSocket long connection
     v
-Local Starry Connector
+Local agent-connector
     |-- CLI Agent
     `-- HTTP Agent (loopback by default)
 ```

@@ -1,4 +1,4 @@
-# Starry Connector 内测快速开始
+# agent-connector 内测快速开始
 
 ## 1. 准备
 
