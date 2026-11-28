@@ -20,6 +20,6 @@
     "verify": "npm test && npm run audit:public"
   },
   "dependencies": {
-    "@larksuiteoapi/node-sdk": "^1.76.0"
+    "@larksuiteoapi/node-sdk": "^1.77.0"
   }
 }
